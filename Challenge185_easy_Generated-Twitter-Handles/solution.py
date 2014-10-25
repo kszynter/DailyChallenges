@@ -5,7 +5,7 @@ import re
 # DONE save 10 longest
 # DONE save 10 shortest
 # TODO replace 'at' with '@'
-# TODO print sorted on the screen
+# DONE print sorted on the screen
 
 def contains_at(line):
     return True if re.search('at', line) else False
@@ -14,7 +14,7 @@ def process_file(fileName, words_cache):
     file = open(fileName, 'r')
 
     while True:
-        line = file.readline()
+        line = file.readline().strip()
 
         if contains_at(line):
             words_cache.add_or_replace(line)
@@ -26,12 +26,28 @@ def process_file(fileName, words_cache):
 
     pass
 
-class LongWordsCache:
-    'Keeps longest words containing \'at\''
+
+class BaseClass:
 
     def __init__(self, size):
         self.size = size
         self.words = []
+
+    def print_sorted(self, order):
+        if order == "DESCENDING":
+            self.words.sort()
+            self.words.sort(key=len, reverse=True)
+            for word in self.words:
+                print word
+        elif order == "ASCENDING":
+            self.words.sort()
+            self.words.sort(key=len, reverse=False)
+            for word in self.words:
+                print word
+
+
+class LongWordsCache(BaseClass):
+    'Keeps longest words containing \'at\''
 
     def add_or_replace(self, word):
         # if below max cap, then just add new word
@@ -45,12 +61,8 @@ class LongWordsCache:
                     break
         pass
 
-class ShortWordsCache:
+class ShortWordsCache(BaseClass):
     'Keeps shortest words containing \'at\''
-
-    def __init__(self, size):
-        self.size = size
-        self.words = []
 
     def add_or_replace(self, word):
         # if below max cap, then just add new word
@@ -75,5 +87,5 @@ short_words = ShortWordsCache(CACHE_SIZE)
 process_file(FILE_NAME, long_words)
 process_file(FILE_NAME, short_words)
 
-print "Long words:'n", long_words.words
-print "Short words:'n", short_words.words
+long_words.print_sorted("DESCENDING")
+short_words.print_sorted("ASCENDING")
