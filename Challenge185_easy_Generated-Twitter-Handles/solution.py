@@ -4,19 +4,19 @@ import re
 # DONE check whether contains 'at'
 # DONE save 10 longest
 # DONE save 10 shortest
-# TODO replace 'at' with '@'
+# DONE replace 'at' with '@'
 # DONE print sorted on the screen
 
-def contains_at(line):
-    return True if re.search('at', line) else False
+def contains_substring(line, substring):
+    return True if re.search(substring, line) else False
 
-def process_file(fileName, words_cache):
+def process_file(fileName, words_cache, substring, replacement):
     file = open(fileName, 'r')
 
     while True:
         line = file.readline().strip()
 
-        if contains_at(line):
+        if contains_substring(line, substring):
             words_cache.add_or_replace(line)
 
         if not line:
@@ -24,30 +24,33 @@ def process_file(fileName, words_cache):
 
     file.close()
 
+    words_cache.sort()
+    words_cache.replace_and_show(substring, replacement)
+
     pass
 
 
 class BaseClass:
 
-    def __init__(self, size):
-        self.size = size
+    def __init__(self, size, order):
         self.words = []
+        self.size = size
+        self.order = order
 
-    def print_sorted(self, order):
-        if order == "DESCENDING":
+    def sort(self):
+        if self.order == "DESCENDING":
             self.words.sort()
             self.words.sort(key=len, reverse=True)
-            for word in self.words:
-                print word
-        elif order == "ASCENDING":
+        elif self.order == "ASCENDING":
             self.words.sort()
             self.words.sort(key=len, reverse=False)
-            for word in self.words:
-                print word
 
+    def replace_and_show(self, substring, replacement):
+        for i in range(0, len(self.words)):
+            print self.words[i].replace(substring, replacement), ":", self.words[i]
 
 class LongWordsCache(BaseClass):
-    'Keeps longest words containing \'at\''
+    'Keeps longest words containing given substring'
 
     def add_or_replace(self, word):
         # if below max cap, then just add new word
@@ -61,8 +64,9 @@ class LongWordsCache(BaseClass):
                     break
         pass
 
+
 class ShortWordsCache(BaseClass):
-    'Keeps shortest words containing \'at\''
+    'Keeps shortest words containing given substring'
 
     def add_or_replace(self, word):
         # if below max cap, then just add new word
@@ -76,16 +80,16 @@ class ShortWordsCache(BaseClass):
                     break
         pass
 
+
 # main logic
 
-CACHE_SIZE = 10
 FILE_NAME = 'enable1.txt'
+CACHE_SIZE = 10
+SUBSTRING = 'at'
+REPLACEMENT = '@'
 
-long_words = LongWordsCache(CACHE_SIZE)
-short_words = ShortWordsCache(CACHE_SIZE)
+long_words = LongWordsCache(CACHE_SIZE, "DESCENDING")
+short_words = ShortWordsCache(CACHE_SIZE, "ASCENDING")
 
-process_file(FILE_NAME, long_words)
-process_file(FILE_NAME, short_words)
-
-long_words.print_sorted("DESCENDING")
-short_words.print_sorted("ASCENDING")
+process_file(FILE_NAME, long_words, SUBSTRING, REPLACEMENT)
+process_file(FILE_NAME, short_words, SUBSTRING, REPLACEMENT)
