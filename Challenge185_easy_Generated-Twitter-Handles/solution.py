@@ -4,7 +4,12 @@ def contains_substring(line, substring):
     return True if re.search(substring, line) else False
 
 def process_file(fileName, words_cache, substring, replacement):
-    file = open(fileName, 'r')
+    try:
+        file = open(fileName, 'r')
+    except IOError:
+        print "File was not found, please provide one named 'enable1.txt'"
+        print "or download from: https://dotnetperls-controls.googlecode.com/files/enable1.txt"
+        exit()
 
     while True:
         line = file.readline().strip()
