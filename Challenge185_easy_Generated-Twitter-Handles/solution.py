@@ -1,12 +1,5 @@
 import re
 
-# DONE read file
-# DONE check whether contains 'at'
-# DONE save 10 longest
-# DONE save 10 shortest
-# DONE replace 'at' with '@'
-# DONE print sorted on the screen
-
 def contains_substring(line, substring):
     return True if re.search(substring, line) else False
 
@@ -31,6 +24,7 @@ def process_file(fileName, words_cache, substring, replacement):
 
 
 class BaseClass:
+    'Keeps commong code'
 
     def __init__(self, size, order):
         self.words = []
@@ -53,10 +47,8 @@ class LongWordsCache(BaseClass):
     'Keeps longest words containing given substring'
 
     def add_or_replace(self, word):
-        # if below max cap, then just add new word
         if len(self.words) < self.size:
             self.words.append(word)
-        # else check which smalle rword we can replace
         else:
             for i in range(0, len(self.words)):
                 if len(self.words[i]) < len(word):
@@ -69,10 +61,8 @@ class ShortWordsCache(BaseClass):
     'Keeps shortest words containing given substring'
 
     def add_or_replace(self, word):
-        # if below max cap, then just add new word
         if len(self.words) < self.size:
             self.words.append(word)
-        # else check which smalle rword we can replace
         else:
             for i in range(0, len(self.words)):
                 if len(self.words[i]) > len(word):
