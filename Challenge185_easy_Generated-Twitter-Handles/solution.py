@@ -2,8 +2,8 @@ import re
 
 # DONE read file
 # DONE check whether contains 'at'
-# TODO save 10 longest
-# TODO save 10 shortest
+# DONE save 10 longest
+# DONE save 10 shortest
 # TODO replace 'at' with '@'
 # TODO print sorted on the screen
 
